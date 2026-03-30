@@ -67,8 +67,8 @@ function computeStats() {
 }
 
 // Mock Axios
-const originalGet = axios.get;
-const originalPost = axios.post;
+const originalGet = axios.get.bind(axios);
+const originalPost = axios.post.bind(axios);
 
 axios.get = async function(url, config) {
     if (url.startsWith('/api/auth')) return originalGet(url, config); // Bypass mock for auth
@@ -306,7 +306,9 @@ async function handleLogin(e) {
             refreshLibrarianDashboard();
         }
     } catch (error) {
-        showToast(error.response?.data?.message || "Authentication failed");
+        console.error("Login/Auth Error:", error);
+        const errorMsg = error.response?.data?.message || (error.response?.status === 404 ? "API Endpoint not found (404)" : null) || error.message || "Authentication failed";
+        showToast(errorMsg);
         btn.innerHTML = 'Sign In / Register';
         btn.disabled = false;
     }
