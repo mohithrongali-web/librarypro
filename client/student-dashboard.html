@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | NexLib</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">NexLib</div>
+        <div class="nav-links">
+            <span id="welcome-msg"></span>
+            <div id="notification-btn" style="cursor: pointer; position: relative;">
+                Notifications <span class="badge hidden" id="notif-badge">0</span>
+            </div>
+            <button class="secondary" id="logout-btn" style="width: auto; padding: 0.5rem 1rem;">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container animate-fade">
+        <h2>Available Books</h2>
+        <div class="grid" id="books-grid">
+            <!-- Books injected here -->
+        </div>
+
+        <h2 style="margin-top: 3rem;">My Requests & Issued Books</h2>
+        <div class="card" style="margin-top: 1rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Author</th>
+                        <th>Request Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="requests-tbody">
+                    <!-- Requests injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div id="notif-modal" class="modal-overlay hidden">
+        <div class="card modal-content">
+            <h3>Notifications</h3>
+            <div id="notif-list" style="margin-top: 1rem; max-height: 300px; overflow-y: auto;">
+                <!-- Notifications injected here -->
+            </div>
+            <button id="close-notif-btn" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/student.js"></script>
+</body>
+</html>

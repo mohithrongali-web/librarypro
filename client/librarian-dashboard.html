@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librarian Dashboard | NexLib</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">NexLib <small style="color: var(--primary); font-size: 0.8rem; margin-left: 0.5rem;">[ADMIN]</small></div>
+        <div class="nav-links">
+            <span id="welcome-msg"></span>
+            <button class="secondary" id="logout-btn" style="width: auto; padding: 0.5rem 1rem;">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container animate-fade">
+        <div class="dashboard-grid">
+            
+            <!-- Add Book Sidebar -->
+            <div>
+                <div class="card">
+                    <h3>Add New Book</h3>
+                    <form id="add-book-form" style="margin-top: 1rem;">
+                        <input type="text" id="title" placeholder="Book Title" required>
+                        <input type="text" id="author" placeholder="Author Name" required>
+                        <input type="text" id="category" placeholder="Category (e.g. Science, Fiction)">
+                        <input type="text" id="rack" placeholder="Rack Location (e.g. A1, B2)">
+                        <button type="submit">Add Book</button>
+                    </form>
+                    <div id="add-msg" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+                </div>
+            </div>
+
+            <!-- Manage Requests & Books -->
+            <div>
+                <div class="card">
+                    <h3>Pending Requests</h3>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-tbody">
+                                <!-- Requests here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 2rem;">
+                    <h3>All Approved / Issued Books</h3>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book</th>
+                                    <th>Return By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="issued-tbody">
+                                <!-- Issued here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/librarian.js"></script>
+</body>
+</html>
