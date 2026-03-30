@@ -2,15 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { setupDatabase } = require('./db/setup');
+const { setupDatabase } = require('./api/db/setup');
 
-const authRoutes = require('./routes/auth.routes');
-const booksRoutes = require('./routes/books.routes');
-const requestsRoutes = require('./routes/requests.routes');
-const notificationsRoutes = require('./routes/notifications.routes');
-const librarianRoutes = require('./routes/librarian.routes');
-const studyRoomsRoutes = require('./routes/rooms.routes');
-const facultyRequestsRoutes = require('./routes/faculty.routes');
+const authRoutes = require('./api/routes/auth.routes');
+const booksRoutes = require('./api/routes/books.routes');
+const requestsRoutes = require('./api/routes/requests.routes');
+const notificationsRoutes = require('./api/routes/notifications.routes');
+const librarianRoutes = require('./api/routes/librarian.routes');
+const studyRoomsRoutes = require('./api/routes/rooms.routes');
+const facultyRequestsRoutes = require('./api/routes/faculty.routes');
 
 const app = express();
 
@@ -33,7 +33,7 @@ app.use('/api/transactions', librarianRoutes);
 // Health check endpoint
 app.use('/api/health', async (req, res) => {
     try {
-        const { pool } = require('./db/setup');
+        const { pool } = require('./api/db/setup');
         const result = await pool.query('SELECT NOW()');
         res.json({ status: 'ok', time: result.rows[0].now, env: { hasDatabaseUrl: !!process.env.DATABASE_URL } });
     } catch (error) {
@@ -43,7 +43,7 @@ app.use('/api/health', async (req, res) => {
 });
 
 // Serve Static Frontend Files
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Setup database and start server
 const PORT = process.env.PORT || 3000;
