@@ -43,7 +43,7 @@ app.use('/api/health', async (req, res) => {
 });
 
 // Serve Static Frontend Files
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Setup database and start server
 const PORT = process.env.PORT || 3000;
