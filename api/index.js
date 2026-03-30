@@ -30,6 +30,18 @@ app.use('/api/students/all', (req, res) => res.redirect('/api/librarian/students
 app.use('/api/librarians/all', (req, res) => res.redirect('/api/librarian/librarians/all'));
 app.use('/api/transactions', librarianRoutes);
 
+// Health check endpoint
+app.use('/api/health', async (req, res) => {
+    try {
+        const { pool } = require('./db/setup');
+        const result = await pool.query('SELECT NOW()');
+        res.json({ status: 'ok', time: result.rows[0].now, env: { hasDatabaseUrl: !!process.env.DATABASE_URL } });
+    } catch (error) {
+        console.error("Health Check Error: ", error);
+        res.status(500).json({ status: 'error', message: error.message, hasDatabaseUrl: !!process.env.DATABASE_URL });
+    }
+});
+
 // Serve Static Frontend Files
 app.use(express.static(path.join(__dirname, '../client')));
 
