@@ -2,10 +2,10 @@
   "name": "library-management-system",
   "version": "1.0.0",
   "description": "Full-stack Library Management System",
-  "main": "server/index.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
