@@ -196,8 +196,8 @@ function renderLogin() {
                     </div>
                     <div class="mt-8 space-y-2 text-sm">
                         <p>✓ Student: Any roll number + min 6 char password</p>
-                        <p>✓ Librarian: Any email + min 6 char password</p>
-                        <p>✓ Auto-registration for both roles</p>
+                        <p>✓ Librarian: Sign in with existing credentials</p>
+                        <p>✓ Auto-registration for students</p>
                         <p>✓ Detailed statistics & analytics</p>
                         <p>✓ Book location popups with full details</p>
                     </div>
@@ -207,8 +207,8 @@ function renderLogin() {
                         <button id="studentTabBtn" class="px-6 py-2 rounded-lg font-semibold transition ${isStudent ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-200'}">🎓 Student</button>
                         <button id="librarianTabBtn" class="px-6 py-2 rounded-lg font-semibold transition ${!isStudent ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-200'}">📚 Librarian</button>
                     </div>
-                    <h2 class="text-2xl font-bold">${isStudent ? 'Student Access' : 'Librarian Registration/Login'}</h2>
-                    <p class="text-gray-500 text-sm mt-1">${isStudent ? 'Enter your credentials to continue' : 'Create new account or login with existing'}</p>
+                    <h2 class="text-2xl font-bold">${isStudent ? 'Student Access' : 'Librarian Sign In'}</h2>
+                    <p class="text-gray-500 text-sm mt-1">${isStudent ? 'Enter your credentials to continue' : 'Sign in with your admin credentials'}</p>
                     <form id="loginForm" class="mt-6 space-y-4">
                         ${isStudent ? `
                             <div><label class="block text-sm font-medium text-gray-700 mb-1">Roll Number</label><input type="text" id="rollNumber" placeholder="e.g., CS2024001" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"></div>
@@ -216,10 +216,9 @@ function renderLogin() {
                             <div><label class="block text-sm font-medium text-gray-700 mb-1">Full Name (optional)</label><input type="text" id="studentName" placeholder="Your full name" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"></div>
                         ` : `
                             <div><label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label><input type="email" id="librarianEmail" placeholder="yourname@studypal.edu" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Password (min 6 characters)</label><input type="password" id="librarianPassword" placeholder="••••••••" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Full Name (optional)</label><input type="text" id="librarianName" placeholder="Your full name" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Password</label><input type="password" id="librarianPassword" placeholder="••••••••" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"></div>
                         `}
-                        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-md mt-2">${isStudent ? '🔐 Sign In / Register' : '📘 Login / Register'}</button>
+                        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-md mt-2">${isStudent ? '🔐 Sign In / Register' : '📘 Sign In'}</button>
                     </form>
                     <div class="mt-6 text-center text-xs text-gray-400">
                         <i class="fas fa-shield-alt"></i> StudyPal - Your Smart Library Companion
@@ -290,10 +289,7 @@ async function handleLogin(e) {
                 userData = res.data;
             } catch (loginError) {
                 if (loginError.response?.data?.message?.includes('User not found')) {
-                    showToast("Registering Librarian...", "success");
-                    await axios.post('/api/auth/register', payload);
-                    const retryRes = await axios.post('/api/auth/login', { email, password: pwd, role: 'librarian' });
-                    userData = retryRes.data;
+                    throw { response: { data: { message: 'Librarian account not found. Please contact the administrator.' } } };
                 } else {
                     throw loginError;
                 }
