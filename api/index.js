@@ -31,7 +31,7 @@ app.use('/api/librarians/all', (req, res) => res.redirect('/api/librarian/librar
 app.use('/api/transactions', librarianRoutes);
 
 // Serve Static Frontend Files
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../client')));
 
 // Setup database and start server
 const PORT = process.env.PORT || 3000;
