@@ -36,11 +36,22 @@ app.use(express.static(path.join(__dirname, '../client')));
 // Setup database and start server
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, async () => {
-    console.log(`Server running on port ${PORT}`);
+// Export the app for Vercel
+module.exports = app;
+
+// Only start the server if we're not running in a serverless environment (like Vercel)
+if (require.main === module || !process.env.VERCEL) {
+    app.listen(PORT, async () => {
+        console.log(`Server running on port ${PORT}`);
+        if (process.env.DATABASE_URL) {
+            await setupDatabase();
+        } else {
+            console.log('No DATABASE_URL provided. Skipping auto table setup.');
+        }
+    });
+} else {
+    // In Vercel environment, still ensure database tables are created on cold start
     if (process.env.DATABASE_URL) {
-        await setupDatabase();
-    } else {
-        console.log('No DATABASE_URL provided. Skipping auto table setup.');
+        setupDatabase().catch(err => console.error('Database setup error on Vercel:', err));
     }
-});
+}
